@@ -8,7 +8,6 @@
 #property description "Moving Averages Convergence/Divergence"
 #property strict
 
-#include <MovingAverages.mqh>
 
 //--- indicator settings
 #property  indicator_separate_window
@@ -69,6 +68,16 @@ int OnInit(void)
    Buttons();
    return(INIT_SUCCEEDED);
   }
+  
+//+------------------------------------------------------------------+
+//|      START                                                      |
+//+------------------------------------------------------------------+
+void start()
+{
+   
+}
+
+
 //+------------------------------------------------------------------+
 //| Moving Averages Convergence/Divergence                           |
 //+------------------------------------------------------------------+
@@ -136,50 +145,33 @@ int OnCalculate (const int rates_total,
       ExtMacdBuffer[j]=mid1-mid2;
    
    }
-//--- signal line counted in the 2-nd buffer
-   //SimpleMAOnBuffer(rates_total,prev_calculated,0,InpSignalSMA,ExtMacdBuffer,ExtSignalBuffer);
-//--- done
    return(rates_total);
   }
 //+------------------------------------------------------------------+
 
-void OnChartEvent(const int id, const long& lparam, const double& dparam, const string& sparam)
-{
-    if (id == CHARTEVENT_OBJECT_CLICK) {
-    if(sparam==botton_te_ke)
-        {
-            //Sleep(100);            
-            ObjectSetInteger(0, botton_te_ke, OBJPROP_STATE, false);
-            ObjectSetInteger(0, botton_te_sb, OBJPROP_STATE, false);
-            ObjectSetInteger(0, botton_te_te_ke, OBJPROP_STATE, false);
-            setting=1;start();
-        }
-    if(sparam=="13 8 5 5")        
-        if (ObjectGetInteger(0, "13 8 5 5", OBJPROP_STATE)) {
-            Sleep(100);
-            ObjectSetInteger(0, "8 5 3 3", OBJPROP_STATE, false);
-            ObjectSetInteger(0, "21 13 8 8", OBJPROP_STATE, false);
-            ObjectSetInteger(0, "34 21 13 13", OBJPROP_STATE, false);
-            setting=2;start();
-        }
-    if(sparam=="21 13 8 8")
-        if (ObjectGetInteger(0, "21 13 8 8", OBJPROP_STATE)) {
-            Sleep(100);
-            ObjectSetInteger(0, "13 8 5 5", OBJPROP_STATE, false);
-            ObjectSetInteger(0, "8 5 3 3", OBJPROP_STATE, false);
-            ObjectSetInteger(0, "34 21 13 13", OBJPROP_STATE, false);
-            setting=3;start();
-        }
-    if(sparam=="34 21 13 13")        
-        if (ObjectGetInteger(0, "34 21 13 13", OBJPROP_STATE)) {
-            Sleep(100);
-            ObjectSetInteger(0, "8 5 3 3", OBJPROP_STATE, false);
-            ObjectSetInteger(0, "21 13 8 8", OBJPROP_STATE, false);
-            ObjectSetInteger(0, "13 8 5 5", OBJPROP_STATE, false);
-            setting=4;start();
-        }         
-      }            
-}  
+//void OnChartEvent(const int id, const long& lparam, const double& dparam, const string& sparam)
+//{
+//    if (id == CHARTEVENT_OBJECT_CLICK) {
+//            ObjectSetInteger(0, botton_te_ke, OBJPROP_STATE, false);
+//            ObjectSetInteger(0, botton_te_sb, OBJPROP_STATE, false);
+//            ObjectSetInteger(0, botton_te_te_ke, OBJPROP_STATE, false);
+//       if(sparam==botton_te_ke)
+//           {
+//               //Sleep(100);            
+//               setting=1;start();
+//           }
+//       if(sparam==botton_te_sb)        
+//            {
+//               //Sleep(100);
+//               setting=2;start();
+//           }
+//       if(sparam==botton_te_te_ke)        
+//            {
+//               //Sleep(100);
+//               setting=3;start();
+//           }        
+//      }            
+//}  
 
 //+------------------------------------------------------------------+
 //| Create the button                                                |
