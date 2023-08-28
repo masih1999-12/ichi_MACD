@@ -3,9 +3,8 @@
 //|                   Copyright 2005-2014, MetaQuotes Software Corp. |
 //|                                              http://www.mql4.com |
 //+------------------------------------------------------------------+
-#property copyright   "2005-2014, MetaQuotes Software Corp."
-#property link        "http://www.mql4.com"
-#property description "Moving Averages Convergence/Divergence"
+#property copyright   "2023, "
+#property description "ICHI_MACD"
 #property strict
 
 
@@ -69,8 +68,12 @@ int OnInit(void)
    //Start();
    return(INIT_SUCCEEDED);
   }
-
-
+void OnDeinit(const int reason)
+{
+   ButtonDelete(0,botton_te_ke);
+   ButtonDelete(0,botton_te_sb);
+   ButtonDelete(0,botton_te_te_ke);
+}
 //+------------------------------------------------------------------+
 //| Moving Averages Convergence/Divergence                           |
 //+------------------------------------------------------------------+
@@ -234,10 +237,29 @@ bool ButtonCreate(const long              chart_ID=0,               // chart's I
 //--- successful execution
    return(true);
   }
+  bool ButtonDelete(const long   chart_ID=0,    // chart's ID
+                  const string name="Button") // button name
+  {
+//--- reset the error value
+   ResetLastError();
+//--- delete the button
+   if(!ObjectDelete(chart_ID,name))
+     {
+      Print(__FUNCTION__,
+            ": failed to delete the button! Error code = ",GetLastError());
+      return(false);
+     }
+//--- successful execution
+   return(true);
+  }
+  //+------------------------------------------------------------------+
+  //|            Setting                                             |
+  //+------------------------------------------------------------------+
 void Setting(){
    if(setting==1){
           part1=9;
           part2=26;
+          
    }
    
    if(setting==2){
@@ -279,7 +301,8 @@ ButtonCreate(0,botton_te_te_ke,subwindow_number,5,80,70,20,CORNER_LEFT_UPPER,bot
 //+------------------------------------------------------------------+
 void Start()
 {
-      
+     IndicatorShortName(IndicatorName());
+      SetIndexLabel(0,IndicatorName()); 
      if (setting==1 || setting ==2)
      for (int i=Bars-53;i>=0;i--)
          {
