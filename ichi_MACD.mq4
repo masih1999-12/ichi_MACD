@@ -66,16 +66,9 @@ int OnInit(void)
 //--- initialization done
    Setting();
    Buttons();
+   //Start();
    return(INIT_SUCCEEDED);
   }
-  
-//+------------------------------------------------------------------+
-//|      START                                                      |
-//+------------------------------------------------------------------+
-void start()
-{
-   
-}
 
 
 //+------------------------------------------------------------------+
@@ -92,86 +85,88 @@ int OnCalculate (const int rates_total,
                  const long& volume[],
                  const int& spread[])
   {
-   ArraySetAsSeries(open,false);
-   ArraySetAsSeries(high,false);
-   ArraySetAsSeries(low,false);
-   ArraySetAsSeries(close,false);
-   int limit;
-//---
-   if(rates_total<=9 )
-      return(0);
-//--- last counted bar will be recounted
-   limit=rates_total-prev_calculated;
-   if(prev_calculated>0)
-      limit++;
-//--- macd counted in the 1-st buffer
-   double mid1=0,mid2=0;
-   for(int j=0; j<limit; j++)
-   {
-      //highest part1
-      double h=iHigh(_Symbol,_Period,j);
-      for (int i=j+1;i<j+part1;i++)
-      {
-         if(iHigh(_Symbol,_Period,i)>h)
-            h= iHigh(_Symbol,_Period,i);
-      }
-      
-      //lowest part1
-      double l=iLow(_Symbol,_Period,j);
-      for (int i=j+1;i<j+part1;i++)
-      {
-         if(iLow(_Symbol,_Period,i)<l)
-            l= iLow(_Symbol,_Period,i);
-      }
-      mid1=NormalizeDouble((h+l),_Digits);
-      
-      //highest part2
-      h=iHigh(_Symbol,_Period,j);
-      for (int i=j+1;i<j+part2;i++)
-      {
-         if(iHigh(_Symbol,_Period,i)>h)
-            h= iHigh(_Symbol,_Period,i);
-      }
-      
-      //lowest part2
-      l=iLow(_Symbol,_Period,j);
-      for (int i=j+1;i<j+part2;i++)
-      {
-         if(iLow(_Symbol,_Period,i)<l)
-            l= iLow(_Symbol,_Period,i);
-      }
-      mid2=NormalizeDouble((h+l),_Digits);
-      
-      ExtMacdBuffer[j]=mid1-mid2;
-   
-   }
+//   ArraySetAsSeries(open,false);
+//   ArraySetAsSeries(high,false);
+//   ArraySetAsSeries(low,false);
+//   ArraySetAsSeries(close,false);
+//   int limit;
+////---
+//   if(rates_total<=9 )
+//      return(0);
+////--- last counted bar will be recounted
+//   limit=rates_total-prev_calculated;
+//   if(prev_calculated>0)
+//      limit++;
+////--- macd counted in the 1-st buffer
+//   double mid1=0,mid2=0;
+//   for(int j=0; j<limit; j++)
+//   {
+//      //highest part1
+//      double h=iHigh(_Symbol,_Period,j);
+//      for (int i=j+1;i<j+part1;i++)
+//      {
+//         if(iHigh(_Symbol,_Period,i)>h)
+//            h= iHigh(_Symbol,_Period,i);
+//      }
+//      
+//      //lowest part1
+//      double l=iLow(_Symbol,_Period,j);
+//      for (int i=j+1;i<j+part1;i++)
+//      {
+//         if(iLow(_Symbol,_Period,i)<l)
+//            l= iLow(_Symbol,_Period,i);
+//      }
+//      mid1=NormalizeDouble((h+l),_Digits);
+//      
+//      //highest part2
+//      h=iHigh(_Symbol,_Period,j);
+//      for (int i=j+1;i<j+part2;i++)
+//      {
+//         if(iHigh(_Symbol,_Period,i)>h)
+//            h= iHigh(_Symbol,_Period,i);
+//      }
+//      
+//      //lowest part2
+//      l=iLow(_Symbol,_Period,j);
+//      for (int i=j+1;i<j+part2;i++)
+//      {
+//         if(iLow(_Symbol,_Period,i)<l)
+//            l= iLow(_Symbol,_Period,i);
+//      }
+//      mid2=NormalizeDouble((h+l),_Digits);
+//      
+//      ExtMacdBuffer[j]=mid1-mid2;
+//   
+//   }
    return(rates_total);
   }
 //+------------------------------------------------------------------+
 
-//void OnChartEvent(const int id, const long& lparam, const double& dparam, const string& sparam)
-//{
-//    if (id == CHARTEVENT_OBJECT_CLICK) {
-//            ObjectSetInteger(0, botton_te_ke, OBJPROP_STATE, false);
-//            ObjectSetInteger(0, botton_te_sb, OBJPROP_STATE, false);
-//            ObjectSetInteger(0, botton_te_te_ke, OBJPROP_STATE, false);
-//       if(sparam==botton_te_ke)
-//           {
-//               //Sleep(100);            
-//               setting=1;start();
-//           }
-//       if(sparam==botton_te_sb)        
-//            {
-//               //Sleep(100);
-//               setting=2;start();
-//           }
-//       if(sparam==botton_te_te_ke)        
-//            {
-//               //Sleep(100);
-//               setting=3;start();
-//           }        
-//      }            
-//}  
+void OnChartEvent(const int id, const long& lparam, const double& dparam, const string& sparam)
+{
+    if (id == CHARTEVENT_OBJECT_CLICK) {
+            ObjectSetInteger(0, botton_te_ke, OBJPROP_STATE, false);
+            ObjectSetInteger(0, botton_te_sb, OBJPROP_STATE, false);
+            ObjectSetInteger(0, botton_te_te_ke, OBJPROP_STATE, false);
+       if(sparam==botton_te_ke)
+           {
+               Sleep(100);            
+               setting=1;
+           }
+       if(sparam==botton_te_sb)        
+            {
+               Sleep(100);
+               setting=2;
+           }
+       if(sparam==botton_te_te_ke)        
+            {
+               Sleep(100);
+               setting=3;
+           }  
+       Setting();   
+       Start();   
+      }            
+}  
 
 //+------------------------------------------------------------------+
 //| Create the button                                                |
@@ -251,7 +246,8 @@ void Setting(){
    }
    
    if(setting==3){
-        
+        part1=9;
+        part2=26;
    }
 }
 string IndicatorName()
@@ -277,3 +273,48 @@ ButtonCreate(0,botton_te_sb,subwindow_number,5,50,70,20,CORNER_LEFT_UPPER,botton
 ButtonCreate(0,botton_te_te_ke,subwindow_number,5,80,70,20,CORNER_LEFT_UPPER,botton_text_te_te_ke,"Arial",8,
       clrBlack,C'236,233,216',clrNONE,false,false,false,true,0); 
 }
+
+//+------------------------------------------------------------------+
+//|      START                                                      |
+//+------------------------------------------------------------------+
+void Start()
+{
+      
+     if (setting==1 || setting ==2)
+     for (int i=Bars-53;i>=0;i--)
+         {
+            ExtMacdBuffer[i]=FindMid(i,part1)-FindMid(i,part2);
+         }
+     else if (setting==3)
+     {
+         for (int i=Bars-53;i>=0;i--)
+         {
+            ExtMacdBuffer[i]=FindMid(i,part1)-(FindMid(i,part1)-FindMid(i,part2));
+         }   
+     }
+     
+}
+double FindMid(int s , int count)
+{
+   return NormalizeDouble((FindHigh(s,count)+FindLow(s,count))/2,_Digits);
+}
+double FindHigh(int s , int count)
+{
+      double h=iHigh(_Symbol,_Period,s);
+      for (int i=s+1;i<s+count;i++)
+      {
+         if(iHigh(_Symbol,_Period,i)>h)
+            h= iHigh(_Symbol,_Period,i);
+      }
+      return NormalizeDouble(h,_Digits);
+}
+double FindLow(int s , int count)
+{
+      double l=iLow(_Symbol,_Period,s);
+      for (int i=s+1;i<s+count;i++)
+      {
+         if(iLow(_Symbol,_Period,i)<l)
+            l= iLow(_Symbol,_Period,i);
+      }
+      return NormalizeDouble(l,_Digits);
+      }
