@@ -312,7 +312,7 @@ void Start()
      {
          for (int i=Bars-53;i>=0;i--)
          {
-            ExtMacdBuffer[i]=FindMid(i,part1)-(FindMid(i,part1)-FindMid(i,part2));
+            ExtMacdBuffer[i]=FindMid(i,part1)-((FindMid(i,part1)+FindMid(i,part2))/2);
          }   
      }
      
