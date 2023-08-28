@@ -12,19 +12,13 @@
 
 //--- indicator settings
 #property  indicator_separate_window
-#property  indicator_buffers 2
-#property  indicator_color1  Silver
-#property  indicator_color2  Red
-#property  indicator_width1  2
+#property  indicator_buffers 1
+#property  indicator_color1  Black
+#property  indicator_width1  4
 //--- indicator parameters
-input int InpFastEMA=12;   // Fast EMA Period
-input int InpSlowEMA=26;   // Slow EMA Period
-input int InpSignalSMA=9;  // Signal SMA Period
+
 //--- indicator buffers
 double    ExtMacdBuffer[];
-double    ExtSignalBuffer[];
-//--- right input parameters flag
-bool      ExtParameters=false;
 
 //+------------------------------------------------------------------+
 //| Custom indicator initialization function                         |
@@ -35,33 +29,19 @@ int OnInit(void)
    IndicatorDigits(Digits+1);
 //--- drawing settings
    SetIndexStyle(0,DRAW_HISTOGRAM);
-   SetIndexStyle(1,DRAW_LINE);
-   SetIndexDrawBegin(1,InpSignalSMA);
+   
+   
+//choose smalest input
+   SetIndexDrawBegin(1,9);
 //--- indicator buffers mapping
    SetIndexBuffer(0,ExtMacdBuffer);
-   SetIndexBuffer(1,ExtSignalBuffer);
 //--- name for DataWindow and indicator subwindow label
-   IndicatorShortName("MACD("+IntegerToString(InpFastEMA)+","+IntegerToString(InpSlowEMA)+","+IntegerToString(InpSignalSMA)+")");
-   SetIndexLabel(0,"MACD");
-   SetIndexLabel(1,"Signal");
+   //IndicatorShortName("MACD("+IntegerToString(InpFastEMA)+","+IntegerToString(InpSlowEMA)+","+IntegerToString(InpSignalSMA)+")");
+   SetIndexLabel(0,"ICHI_MACD");
 //--- check for input parameters
-   if(InpFastEMA<=1 || InpSlowEMA<=1 || InpSignalSMA<=1 || InpFastEMA>=InpSlowEMA)
-     {
-      Print("Wrong input parameters");
-      ExtParameters=false;
-      return(INIT_FAILED);
-     }
-   else
-      ExtParameters=true;
 //--- initialization done
    return(INIT_SUCCEEDED);
   }
-  
-void OnTimer()
-{
-   
-}
-  
 //+------------------------------------------------------------------+
 //| Moving Averages Convergence/Divergence                           |
 //+------------------------------------------------------------------+
@@ -82,7 +62,7 @@ int OnCalculate (const int rates_total,
    ArraySetAsSeries(close,false);
    int limit;
 //---
-   if(rates_total<=InpSignalSMA || !ExtParameters)
+   if(rates_total<=9 )
       return(0);
 //--- last counted bar will be recounted
    limit=rates_total-prev_calculated;
